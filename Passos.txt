@@ -1,0 +1,33 @@
+# 1º - Download do laradock
+    git clone https://github.com/Laradock/laradock.git
+
+# 2º - Copia do arquivo env-example para .env
+    cp env-example .env    
+
+# 3º - Definir nome do banco de dados
+    Usei o banco padrao do laravel
+
+# 4º - Remoção da configuração de volume do workspace
+    Removi para poder instalar o laravel via dockerfile
+
+# 5º - Copiar arquivo .env.example para a pasta do workspace
+    Utilizei um arquivo default do laravel e configurei o banco de dados
+
+# 6º - Configurar o dockerfile do workspace para instalar o laravel via composer
+    ## Adicionar no final do arquivo dockerfile
+
+    RUN rm -rf * && \
+        rm -rf .* && \
+        composer create-project --prefer-dist laravel/laravel . && \
+        rm .env
+
+    COPY .env.example .env
+
+    ## regerar a key do laravel
+    RUN php artisan key:generate
+
+
+##############
+    #a migração automatica no dockerfile, não funcionou porque nesse momento o serviço do mysql 
+    #ainda não estava pronto, ele é instanciado após o workspace
+    #php artisan migrate
